@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Update Appointment</title>
+  </head>
+  <body>
+    <a href='{% url 'home' %}'>Dashboard</a> | <a href='{% url 'logout' %}'>Logout</a>
+    <form action='/appointments/{{ appointment.id }}/update' method='post'>
+      {% csrf_token %}
+      <p>Task: <input type='text' name='task' value='{{ appointment.task }}'></p>
+      <p>Status: <select name='status'>
+        <option value='Pending'>Pending</option>
+        <option value='Done'>Done</option>
+        <option value='Missed'>Missed</option>
+      </select></p>
+      <p>Date: <input type='date' name='date' value='{{ appointment.date|date:"Y-m-d" }}'></p>
+      <p>Time: <input type='time' name='time' value='{{ time }}'></p>
+      <input type='submit' value='Update'>
+    </form>
+  </body>
+</html>

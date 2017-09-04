@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>What's Up</title>
+    {% load staticfiles %}
+    <link rel='stylesheet' type='text/css' href='{% static 'plans/style.css' %}'>
+  </head>
+  <body>
+    <h1>Hello {{ user.name }}</h1>
+    <a href='{% url 'logout' %}'>Logout</a>
+    <h2>Here are your appointments for today, {{ date }} :</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Tasks</th>
+          <th>Time</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for app in todays_apps %}
+        <tr>
+          <td>{{ app.task }}</td>
+          <td>{{ app.time }}</td>
+          <td>{{ app.status }}</td>
+          {% if app.status == 'Pending' %}
+          <td><a href='/appointments/{{ app.id }}'>Edit</a> | <a href='/appointments/{{ app.id }}/delete'>Delete</a></td>
+          {% else %}
+          <td></td>
+          {% endif %}
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <h2>Your Other Appointments:</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Tasks</th>
+          <th>Date</th>
+          <th>Time</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for app in future_apps %}
+        <tr>
+          <td>{{ app.task }}</td>
+          <td>{{ app.date }}</td>
+          <td>{{ app.time }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <h3>Add Appointment</h3>
+    {% if messages %}
+      {% for message in messages %}
+        <p>{{ message }}<p>
+      {% endfor %}
+    {% endif %}
+    <form action='/appointments/create' method='post'>
+      {% csrf_token %}
+      <p>Task: <input type='text' name='task'></p>
+      <p>Date: <input type='date' name='date'></p>
+      <p>Time: <input type='time' name='time'></p>
+      <input type='submit' value='Add'>
+    </form>
+  </body>
+</html>
